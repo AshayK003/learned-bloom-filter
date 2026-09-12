@@ -48,3 +48,6 @@ results/*.pdf
 .DS_Store
 Thumbs.db
 
+# Internal report files
+internals/
+
