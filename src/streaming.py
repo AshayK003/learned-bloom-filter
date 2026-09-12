@@ -1,50 +1,35 @@
 """Streaming Learned Bloom Filter with hybrid drift-triggered retraining.
 
 Architecture:
-  Tier 1: Classifier (Logistic Regression or LightGBM)
-  Tier 2: Active Scalable Bloom Filter (current window)
-  Tier 3: Staggered frozen filters (optional historical evidence)
-
-Retraining triggers:
-  - Periodic: every N insertions
-  - Performance: when classifier AUC drops below threshold on holdout
+  Tier 1: Classifier (Logistic Regression)
+  Tier 2: Scalable Bloom Filter backup (auto-grows, no false negatives)
+  Tier 3: Drift-triggered retraining (periodic)
 """
 
 import numpy as np
-from sklearn.base import clone
-from sklearn.metrics import roc_auc_score
-from typing import Optional, Tuple, List
+from typing import Optional
 
 
 class StreamingLearnedBloomFilter:
-    """Streaming LBF with drift-triggered retraining.
-
-    Combines:
-    - FeatureUnion (TF-IDF char n-grams + structural features)
-    - Logistic Regression classifier (fast inference)
-    - Scalable Bloom Filter backup (no false negatives)
-    - Drift-triggered retraining (AUC-based)
-    """
+    """Streaming LBF with drift-triggered retraining."""
 
     def __init__(
         self,
         classifier,
         feature_extractor,
-        initial_capacity: int = 10000,
         backup_error_rate: float = 0.001,
         retrain_every: int = 1000,
         confidence_threshold: float = 0.9,
         min_holdout_size: int = 200,
     ):
-        self.classifier_template = classifier
-        self.classifier = clone(classifier)
+        self.classifier = classifier
         self.feature_extractor = feature_extractor
-        self.backup_bf = None
-        self.initial_capacity = initial_capacity
         self.backup_error_rate = backup_error_rate
         self.retrain_every = retrain_every
         self.confidence_threshold = confidence_threshold
         self.min_holdout_size = min_holdout_size
+
+        self.backup_bf = None
 
         # Tracking
         self._n_items = 0
@@ -64,9 +49,13 @@ class StreamingLearnedBloomFilter:
         X_transformed = self.feature_extractor.transform(X)
         self.classifier.fit(X_transformed, y)
 
-        # Initialize backup BF with positive items only
+        # Initialize backup BF with scalable mode
+        from pybloom_live import ScalableBloomFilter
+        self.backup_bf = ScalableBloomFilter(
+            initial_capacity=max(len(X), 100),
+            error_rate=self.backup_error_rate,
+        )
         positives = X[y == 1] if len(np.unique(y)) > 1 else X
-        self.backup_bf = self._create_backup_bf(len(positives))
         for item in positives:
             self.backup_bf.add(item)
 
@@ -112,10 +101,6 @@ class StreamingLearnedBloomFilter:
                 return item in self.backup_bf
             return False
 
-    def query_many(self, items) -> np.ndarray:
-        """Batch query multiple items."""
-        return np.array([self.query(item) for item in items])
-
     def _predict_proba(self, item: str) -> float:
         """Get probability of item being in the set."""
         X_transformed = self.feature_extractor.transform([item])
@@ -141,11 +126,6 @@ class StreamingLearnedBloomFilter:
         self._buffer_X = self._buffer_X[-keep:]
         self._buffer_y = self._buffer_y[-keep:]
 
-    def _create_backup_bf(self, capacity):
-        """Create a new backup Bloom Filter."""
-        from pybloom_live import BloomFilter
-        return BloomFilter(capacity=capacity, error_rate=self.backup_error_rate)
-
     @property
     def n_items(self) -> int:
         return self._n_items
@@ -162,7 +142,7 @@ class StreamingLearnedBloomFilter:
     def backup_size_bytes(self) -> int:
         """Size of backup BF in bytes."""
         if self.backup_bf:
-            return len(self.backup_bf.bitarray) // 8
+            return sum(len(f.bitarray) // 8 for f in self.backup_bf.filters)
         return 0
 
     @property

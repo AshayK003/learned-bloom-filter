@@ -3,7 +3,7 @@
 import numpy as np
 from typing import Optional
 
-from pybloom_live import BloomFilter, ScalableBloomFilter
+from pybloom_live import ScalableBloomFilter
 
 
 class StaticLearnedBloomFilter:
@@ -13,14 +13,14 @@ class StaticLearnedBloomFilter:
         self,
         classifier,
         feature_extractor,
-        backup_capacity: int = 10000,
-        backup_fpr: float = 0.001,
+        backup_error_rate: float = 0.001,
         confidence_threshold: float = 0.9,
     ):
         self.classifier = classifier
         self.feature_extractor = feature_extractor
-        self.backup = BloomFilter(capacity=backup_capacity, error_rate=backup_fpr)
+        self.backup_error_rate = backup_error_rate
         self.confidence_threshold = confidence_threshold
+        self.backup_bf = None
         self._n_items = 0
         self._n_backup_hits = 0
         self._n_classifier_hits = 0
@@ -32,10 +32,16 @@ class StaticLearnedBloomFilter:
         X_transformed = self.feature_extractor.transform(X)
         self.classifier.fit(X_transformed, y)
 
+        # Initialize backup BF with scalable mode
+        self.backup_bf = ScalableBloomFilter(
+            initial_capacity=max(len(X), 100),
+            error_rate=self.backup_error_rate,
+        )
+
         # Add positive items to backup BF
         positives = X[y == 1] if len(np.unique(y)) > 1 else X
         for item in positives:
-            self.backup.add(item)
+            self.backup_bf.add(item)
 
         self._is_fitted = True
         return self
@@ -56,11 +62,12 @@ class StaticLearnedBloomFilter:
             return False
         else:
             self._n_backup_hits += 1
-            return item in self.backup
+            return item in self.backup_bf
 
     def add(self, item: str, label: int = 1) -> None:
         """Add item to backup BF."""
-        self.backup.add(item)
+        if label == 1:
+            self.backup_bf.add(item)
         self._n_items += 1
 
     @property
@@ -68,12 +75,12 @@ class StaticLearnedBloomFilter:
         return self._n_items
 
     @property
-    def n_classifier_hits(self) -> int:
-        return self._n_classifier_hits
-
-    @property
     def n_backup_hits(self) -> int:
         return self._n_backup_hits
+
+    @property
+    def n_classifier_hits(self) -> int:
+        return self._n_classifier_hits
 
     @property
     def size_bytes(self) -> int:
@@ -83,4 +90,6 @@ class StaticLearnedBloomFilter:
             clf_size += self.classifier.coef_.nbytes
         if hasattr(self.classifier, 'intercept_'):
             clf_size += self.classifier.intercept_.nbytes
-        return clf_size + len(self.backup.bitarray) // 8
+
+        backup_size = sum(len(f.bitarray) // 8 for f in self.backup_bf.filters) if self.backup_bf else 0
+        return clf_size + backup_size

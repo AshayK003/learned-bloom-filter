@@ -1,0 +1,92 @@
+======================================================================
+30-DAY URLHAUS REPLAY — Streaming LBF vs Baselines
+======================================================================
+
+[1/5] Loading URLhaus data and splitting by date...
+  Date range: 2026-08-14 to 2026-09-12
+  Days: 30
+    2026-08-14: 9 URLs
+    2026-08-15: 4 URLs
+    2026-08-16: 23 URLs
+    2026-08-17: 2 URLs
+    2026-08-18: 12 URLs
+    2026-08-19: 8 URLs
+    2026-08-20: 9 URLs
+    2026-08-21: 17 URLs
+    2026-08-22: 6 URLs
+    2026-08-23: 16 URLs
+    2026-08-24: 9 URLs
+    2026-08-25: 20 URLs
+    2026-08-26: 18 URLs
+    2026-08-27: 23 URLs
+    2026-08-28: 63 URLs
+    2026-08-29: 13 URLs
+    2026-08-30: 33 URLs
+    2026-08-31: 58 URLs
+    2026-09-01: 133 URLs
+    2026-09-02: 31 URLs
+    2026-09-03: 12 URLs
+    2026-09-04: 46 URLs
+    2026-09-05: 17 URLs
+    2026-09-06: 95 URLs
+    2026-09-07: 47 URLs
+    2026-09-08: 38 URLs
+    2026-09-09: 77 URLs
+    2026-09-10: 136 URLs
+    2026-09-11: 135 URLs
+    2026-09-12: 192 URLs
+
+[2/5] Generating fixed test set...
+  Benign test: 3000 URLs
+
+[3/5] Initializing filters...
+
+[4/5] Training Static LBF on first day...
+  Training Streaming LBF on first day...
+
+[5/5] Running 30-day replay...
+
+  [ 1/30] 2026-08-14 |     9 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [ 2/30] 2026-08-15 |     4 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [ 3/30] 2026-08-16 |    23 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [ 4/30] 2026-08-17 |     2 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [ 5/30] 2026-08-18 |    12 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [ 6/30] 2026-08-19 |     8 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [ 7/30] 2026-08-20 |     9 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [ 8/30] 2026-08-21 |    17 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [ 9/30] 2026-08-22 |     6 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [10/30] 2026-08-23 |    16 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [11/30] 2026-08-24 |     9 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [12/30] 2026-08-25 |    20 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [13/30] 2026-08-26 |    18 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [14/30] 2026-08-27 |    23 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [15/30] 2026-08-28 |    63 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [16/30] 2026-08-29 |    13 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [17/30] 2026-08-30 |    33 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [18/30] 2026-08-31 |    58 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [19/30] 2026-09-01 |   133 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [20/30] 2026-09-02 |    31 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0000
+  [21/30] 2026-09-03 |    12 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0043
+  [22/30] 2026-09-04 |    46 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0043
+  [23/30] 2026-09-05 |    17 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0043
+  [24/30] 2026-09-06 |    95 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0043
+  [25/30] 2026-09-07 |    47 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0043
+  [26/30] 2026-09-08 |    38 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0043
+  [27/30] 2026-09-09 |    77 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0043
+  [28/30] 2026-09-10 |   136 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0043
+  [29/30] 2026-09-11 |   135 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0043
+  [30/30] 2026-09-12 |   192 URLs | Classic FPR: 0.0000 | Static FPR: 0.0000 | Stream FPR: 0.0043
+
+======================================================================
+Generating plots...
+======================================================================
+  Saved: results\replay_30day.png
+  Saved: results\replay_30day.csv
+
+======================================================================
+SUMMARY
+======================================================================
+  Classic BF  — Final FPR: 0.0000, FNR: 1.0000
+  Static LBF  — Final FPR: 0.0000, FNR: 0.0052
+  Stream LBF  — Final FPR: 0.0043, FNR: 0.0000
+======================================================================
