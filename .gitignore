@@ -49,5 +49,6 @@ results/*.pdf
 Thumbs.db
 
 # Internal report files
-internals/
+internals/*
+!internals/report.pdf
 
