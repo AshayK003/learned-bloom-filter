@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite it as below."
+type: software
+title: "Streaming Learned Bloom Filters for Dynamic URL Blocklists"
+repository-code: "https://github.com/AshayK003/learned-bloom-filter"
+license: MIT
+authors:
+  - family-names: "Kushwaha"
+    given-names: "Ashay"
+    affiliation: "CypherLabs"
+    orcid: ""
+    url: "https://github.com/AshayK003"
+date-released: "2026-09-12"
+version: "1.0.0"
+keywords:
+  - bloom-filter
+  - learned-bloom-filter
+  - streaming-algorithms
+  - membership-query
+  - url-blocklist
+  - machine-learning
+  - python
+abstract: >
+  A streaming variant of Learned Bloom Filters that maintains bounded
+  false-positive rate over unbounded insertions via a hybrid drift-triggered
+  retraining mechanism and a Scalable Bloom Filter backup. Includes a
+  research-grade benchmark harness comparing classic, static learned,
+  and streaming LBF variants on daily URLhaus snapshots.

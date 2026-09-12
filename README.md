@@ -1,8 +1,10 @@
-# CypherLabs Open Research — Labs 02
+# Streaming Learned Bloom Filters for Dynamic URL Blocklists
 
-Streaming Learned Bloom Filters for URL blocklists.
+**Author:** [Ashay Kushwaha](https://github.com/AshayK003) ([CypherLabs](https://github.com/AshayK003))
+**License:** [MIT](LICENSE)
+**Citation:** [CITATION.cff](CITATION.cff)
 
-**Status:** Research phase complete. Implementation starting.
+---
 
 ## Problem
 
@@ -37,4 +39,3 @@ results/           # Frozen comparison tables (gitignored)
 ## Research
 
 See vault: [[01-Projects/Ideas/Labs 02 - Streaming Learned Bloom Filters]]
-
