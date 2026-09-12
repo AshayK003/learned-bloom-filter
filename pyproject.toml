@@ -36,5 +36,7 @@ Homepage = "https://github.com/AshayK003/learned-bloom-filter"
 Repository = "https://github.com/AshayK003/learned-bloom-filter"
 Issues = "https://github.com/AshayK003/learned-bloom-filter/issues"
 
-[tool.setuptools]
-package-dir = {"" = "src"}
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+]
