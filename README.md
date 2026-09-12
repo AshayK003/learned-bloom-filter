@@ -38,4 +38,4 @@ results/           # Frozen comparison tables (gitignored)
 
 ## Research
 
-See vault: [[01-Projects/Ideas/Labs 02 - Streaming Learned Bloom Filters]]
+Deep research report: [Research.md](RESEARCH.md)

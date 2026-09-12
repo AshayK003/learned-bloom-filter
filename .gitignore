@@ -48,6 +48,3 @@ results/*.pdf
 .DS_Store
 Thumbs.db
 
-# Hermes
-.hermes/
-
