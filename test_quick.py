@@ -60,8 +60,7 @@ def main():
     slbf = StaticLearnedBloomFilter(
         classifier=clf,
         feature_extractor=feats,
-        backup_capacity=len(mal_train),
-        backup_fpr=0.001,
+        backup_error_rate=0.001,
         confidence_threshold=0.9,
     )
     slbf.fit(X_train, y_train)
@@ -78,7 +77,6 @@ def main():
     slbf_stream = StreamingLearnedBloomFilter(
         classifier=clf_stream,
         feature_extractor=build_feature_extractor(ngram_range=(1, 5), max_features=3000),
-        initial_capacity=len(mal_train),
         backup_error_rate=0.001,
         retrain_every=500,
         confidence_threshold=0.9,
