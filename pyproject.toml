@@ -40,3 +40,6 @@ Issues = "https://github.com/AshayK003/learned-bloom-filter/issues"
 dev = [
     "pytest>=7.0.0",
 ]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
