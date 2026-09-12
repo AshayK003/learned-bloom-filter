@@ -1,9 +1,8 @@
 """Complete benchmark: Classic BF, Static LBF, Streaming LBF."""
 
 import sys
-import time
 import numpy as np
-from sklearn.linear_model import LogisticRegression, SGDClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
 sys.path.insert(0, 'src')
@@ -55,9 +54,9 @@ def main():
     results.append(res)
     print(f"  FPR: {res.fpr:.4f}, FNR: {res.fnr:.4f}, Mem: {res.memory_bytes/1024:.1f}KB")
 
-    # 2. Static LBF
-    print("\n--- Static LBF ---")
-    clf = LogisticRegression(class_weight='balanced', max_iter=1000, C=1.0)
+    # 2. Static LBF (best config: C=100)
+    print("\n--- Static LBF (C=100) ---")
+    clf = LogisticRegression(C=100, class_weight='balanced', max_iter=1000)
     slbf = StaticLearnedBloomFilter(
         classifier=clf,
         feature_extractor=feats,
@@ -73,11 +72,9 @@ def main():
     print(f"  FPR: {res.fpr:.4f}, FNR: {res.fnr:.4f}, Mem: {res.memory_bytes/1024:.1f}KB")
     print(f"  Classifier hits: {slbf.n_classifier_hits}, Backup hits: {slbf.n_backup_hits}")
 
-    # 3. Streaming LBF (with retraining)
-    print("\n--- Streaming LBF ---")
-    clf_stream = SGDClassifier(
-        loss='log_loss', class_weight='balanced', random_state=42, max_iter=5
-    )
+    # 3. Streaming LBF (with retraining, LR C=100)
+    print("\n--- Streaming LBF (LR C=100, retrain=500) ---")
+    clf_stream = LogisticRegression(C=100, class_weight='balanced', max_iter=1000)
     slbf_stream = StreamingLearnedBloomFilter(
         classifier=clf_stream,
         feature_extractor=build_feature_extractor(ngram_range=(1, 5), max_features=3000),
@@ -89,7 +86,6 @@ def main():
     )
     slbf_stream.fit(X_train, y_train)
 
-    # Add with labels
     for url in mal_train:
         slbf_stream.add(url, label=1)
     for url in ben_train:
